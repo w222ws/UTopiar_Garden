@@ -1,6 +1,6 @@
 import { Header } from './components/layout/Header';
 import { Hero } from './components/sections/Hero';
-import { HowItWorks } from './components/sections/HowItWorks';
+import { HowItWorks } from './components/sections/HowitWorks';
 import { Services } from './components/sections/Services';
 import { navigation } from './data/site';
 
