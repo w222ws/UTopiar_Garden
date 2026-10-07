@@ -1,5 +1,6 @@
 import { Header } from './components/layout/Header';
 import { Hero } from './components/sections/Hero';
+import { HowItWorks } from './components/sections/HowItWorks';
 import { Services } from './components/sections/Services';
 import { navigation } from './data/site';
 
@@ -15,9 +16,10 @@ export default function App() {
         <Hero />
 
         <Services />
+        <HowItWorks />
 
         {navigation
-          .filter((item) => item.href !== '#services')
+          .filter((item) => item.href !== '#services' && item.href !== '#steps')
           .map((item) => (
             <section
               key={item.href}
