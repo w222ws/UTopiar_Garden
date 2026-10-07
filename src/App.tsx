@@ -1,5 +1,6 @@
 import { Header } from './components/layout/Header';
 import { Hero } from './components/sections/Hero';
+import { Services } from './components/sections/Services';
 import { navigation } from './data/site';
 
 /**
@@ -13,15 +14,19 @@ export default function App() {
       <main>
         <Hero />
 
-        {navigation.map((item) => (
-          <section
-            key={item.href}
-            id={item.href.slice(1)}
-            className="grid min-h-[60svh] place-items-center border-t border-forest-900/10 px-4"
-          >
-            <h2 className="text-h2">{item.label}</h2>
-          </section>
-        ))}
+        <Services />
+
+        {navigation
+          .filter((item) => item.href !== '#services')
+          .map((item) => (
+            <section
+              key={item.href}
+              id={item.href.slice(1)}
+              className="grid min-h-[60svh] place-items-center border-t border-forest-900/10 px-4"
+            >
+              <h2 className="text-h2">{item.label}</h2>
+            </section>
+          ))}
       </main>
     </>
   );
