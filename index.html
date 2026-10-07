@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="uk" class="is-loading">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+
+    <!-- Колір адресного рядка на мобільному (збігається з --color-forest-900) -->
+    <meta name="theme-color" content="#1f3d2b" />
+    <meta name="color-scheme" content="light" />
+
+    <!-- SEO (плейсхолдери: замінити на реальні дані) -->
+    <title>
+      UTopiar Garden — догляд за територією, стрижка газону, прибирання ділянок
+      у Дніпрі
+    </title>
+    <meta
+      name="description"
+      content="Стрижка газону, прибирання території, обрізка дерев і кущів, сезонні роботи у Дніпрі та області. Надішліть фото ділянки в Telegram, і ми назвемо ціну до виїзду."
+    />
+    <link rel="canonical" href="https://example.com/" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / прев'ю посилань у Telegram, Viber, WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:site_name" content="UTopiar Garden" />
+    <meta
+      property="og:title"
+      content="UTopiar Garden — приведемо двір до ладу"
+    />
+    <meta
+      property="og:description"
+      content="Газон, дерева, прибирання та сезонні роботи у Дніпрі та області. Оцінка за фото."
+    />
+    <meta property="og:url" content="https://example.com/" />
+    <meta property="og:image" content="https://example.com/og.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Іконки -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!--
+      Шрифти підключаються через @fontsource-variable у src/index.css
+      (самохостинг, без запитів до Google Fonts).
+    -->
+
+    <!--
+      Екран завантаження. Стилі вбудовані прямо сюди, щоб він з'являвся
+      миттєво, ще до того, як завантажиться CSS і JS сайту.
+      Це суцільний фірмовий екран із кругом, що крутиться. Коли сайт готовий,
+      він іде вгору смугами, як свіжоскошений газон. Анімується тільки transform і opacity.
+    -->
+    <style>
+      html.is-loading {
+        overflow: hidden;
+      }
+      #preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: grid;
+        place-items: center;
+      }
+      #preloader.is-done {
+        pointer-events: none;
+      }
+
+      /* Смуги: вісім вертикальних колонок двох відтінків зеленого */
+      .pl-strips {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+      }
+      .pl-strips i {
+        margin-right: -1px; /* перекриття, щоб не було щілин між смугами */
+        background: #1f3d2b;
+        transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+        transition-delay: 0ms;
+      }
+      .pl-strips i:nth-child(even) {
+        background: #274b35;
+      }
+      #preloader.is-done .pl-strips i {
+        transform: translateY(-101%);
+        transition-delay: calc(var(--i) * 45ms);
+      }
+
+      /* Круг, що крутиться */
+      .pl-ring {
+        position: relative;
+        width: 56px;
+        height: 56px;
+        transition:
+          opacity 0.25s ease,
+          transform 0.25s ease;
+      }
+      #preloader.is-done .pl-ring {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+      .pl-ring svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        animation: pl-spin 0.9s linear infinite;
+      }
+      @keyframes pl-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pl-ring svg {
+          animation-duration: 3s;
+        }
+        .pl-strips i,
+        .pl-ring {
+          transition-duration: 0.01ms;
+          transition-delay: 0ms !important;
+        }
+      }
+    </style>
+    <!-- Без JavaScript екран завантаження не потрібен -->
+    <noscript
+      ><style>
+        #preloader {
+          display: none;
+        }
+        html.is-loading {
+          overflow: auto;
+        }
+      </style></noscript
+    >
+
+    <!-- Структуровані дані для локального пошуку (заповнити реальними даними) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LandscapingBusiness",
+        "name": "UTopiar Garden",
+        "url": "https://example.com/",
+        "telephone": "+380000000000",
+        "areaServed": ["Дніпро", "Дніпропетровська область"],
+        "priceRange": "$$",
+        "description": "Стрижка газону, прибирання території, обрізка дерев і кущів, сезонні роботи у Дніпрі та області."
+      }
+    </script>
+  </head>
+  <body>
+    <div id="preloader" role="status" aria-live="polite">
+      <div class="pl-strips" aria-hidden="true">
+        <i style="--i: 0"></i><i style="--i: 1"></i><i style="--i: 2"></i
+        ><i style="--i: 3"></i><i style="--i: 4"></i><i style="--i: 5"></i
+        ><i style="--i: 6"></i><i style="--i: 7"></i>
+      </div>
+      <div class="pl-ring">
+        <svg viewBox="0 0 50 50" fill="none" aria-hidden="true">
+          <circle
+            cx="25"
+            cy="25"
+            r="20"
+            stroke="#b9e04a"
+            stroke-opacity="0.2"
+            stroke-width="4"
+          />
+          <circle
+            cx="25"
+            cy="25"
+            r="20"
+            stroke="#b9e04a"
+            stroke-width="4"
+            stroke-linecap="round"
+            stroke-dasharray="34 92"
+          />
+        </svg>
+        <span
+          style="
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+          "
+          >Завантаження…</span
+        >
+      </div>
+    </div>
+
+    <div id="root"></div>
+    <noscript>
+      Для роботи сайту потрібен JavaScript. Зателефонуйте нам, і ми все
+      розповімо.
+    </noscript>
+
+    <!--
+      Прибирає екран завантаження, коли готові: сторінка, шрифти й головне фото.
+      Мінімум 600 мс (щоб не мигало), максимум 4 с (щоб не зависнути).
+      Подію "app:ready" шле, коли смуги вже пішли вгору: по ній Hero запускає анімації.
+    -->
+    <script>
+      (function () {
+        var html = document.documentElement;
+        var pre = document.getElementById('preloader');
+        if (!pre) {
+          html.classList.remove('is-loading');
+          return;
+        }
+
+        var started = performance.now();
+        var MIN = 600;
+        var MAX = 4000;
+        var finished = false;
+
+        function finish() {
+          if (finished) return;
+          finished = true;
+          var wait = Math.max(0, MIN - (performance.now() - started));
+          setTimeout(function () {
+            pre.classList.add('is-done');
+            // Hero починає з'являтись, коли перші смуги вже відкрили сторінку
+            setTimeout(function () {
+              html.classList.remove('is-loading');
+              window.dispatchEvent(new Event('app:ready'));
+            }, 300);
+            setTimeout(function () {
+              pre.remove();
+            }, 1800);
+          }, wait);
+        }
+
+        var loaded = new Promise(function (resolve) {
+          if (document.readyState === 'complete') resolve();
+          else window.addEventListener('load', resolve, { once: true });
+        });
+
+        function fonts() {
+          if (!document.fonts || !document.fonts.load) return Promise.resolve();
+          return Promise.all([
+            document.fonts.load('800 1em "Unbounded Variable"', 'Приведемо'),
+            document.fonts.load('400 1em "Onest Variable"', 'Стрижка'),
+          ]).catch(function () {});
+        }
+
+        function heroImage() {
+          return new Promise(function (resolve) {
+            var tries = 0;
+            (function look() {
+              var img = document.querySelector('#root img');
+              if (img) {
+                if (img.complete) return resolve();
+                img.addEventListener('load', resolve, { once: true });
+                img.addEventListener('error', resolve, { once: true });
+                return;
+              }
+              if (++tries > 30) return resolve();
+              setTimeout(look, 50);
+            })();
+          });
+        }
+
+        loaded.then(fonts).then(heroImage).then(finish);
+        setTimeout(finish, MAX);
+      })();
+    </script>
+
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

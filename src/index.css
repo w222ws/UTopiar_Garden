@@ -1,0 +1,276 @@
+/* ==========================================================================
+   Шрифты (самохостинг через fontsource, есть кириллица)
+   npm i @fontsource-variable/unbounded @fontsource-variable/onest
+   ========================================================================== */
+@import '@fontsource-variable/unbounded';
+@import '@fontsource-variable/onest';
+
+@import 'tailwindcss';
+
+/* ==========================================================================
+   Дизайн-токены (Tailwind 4: всё живёт в @theme, tailwind.config не нужен)
+   Каждая переменная автоматически даёт утилиты: bg-forest-900, text-lime-400,
+   font-display, rounded-leaf, shadow-soft и т.д.
+   ========================================================================== */
+@theme {
+  /* --- Цвета --- */
+  --color-forest-950: #11261a;
+  --color-forest-900: #1f3d2b; /* основной тёмный */
+  --color-forest-800: #285038;
+  --color-forest-700: #356648;
+  --color-forest-600: #46805c;
+  --color-forest-100: #e3eee6;
+  --color-forest-50: #f0f6f2;
+
+  --color-lime-500: #9cc933;
+  --color-lime-400: #b9e04a; /* акцент / CTA */
+  --color-lime-300: #cdec74;
+  --color-lime-200: #e0f5a6;
+
+  --color-cream-50: #fbf9f3;
+  --color-cream-100: #f6f3ea; /* основной фон */
+  --color-cream-200: #ece7d8;
+  --color-cream-300: #ddd6c0;
+
+  --color-ink-900: #17201b; /* текст */
+  --color-ink-700: #364139;
+  --color-ink-500: #5f6b63;
+  --color-ink-300: #a3ada6;
+
+  --color-clay-500: #c8763a; /* редкий тёплый акцент: цены, метки */
+
+  /* --- Шрифты --- */
+  --font-display: 'Unbounded Variable', 'Onest Variable', system-ui, sans-serif;
+  --font-sans:
+    'Onest Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* --- Скругления: «листовая» форма = два больших угла по диагонали --- */
+  --radius-card: 1.5rem;
+  --radius-pill: 999px;
+
+  /* --- Тени (мягкие, зеленоватые) --- */
+  --shadow-soft: 0 8px 30px -12px rgb(31 61 43 / 0.25);
+  --shadow-lift: 0 18px 50px -18px rgb(31 61 43 / 0.4);
+  --shadow-cta: 0 10px 24px -8px rgb(156 201 51 / 0.65);
+
+  /* --- Анимации --- */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-fade-up: fade-up 0.7s var(--ease-soft) both;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-ring: ring 2.8s var(--ease-soft) infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  /* Пульсирующее кольцо вокруг иконки звонка */
+  @keyframes ring {
+    0% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    70%,
+    100% {
+      transform: scale(1.7);
+      opacity: 0;
+    }
+  }
+}
+
+/* ==========================================================================
+   База
+   ========================================================================== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    /* отступ под липкую шапку при переходах по якорям */
+    scroll-padding-top: 5rem;
+
+    /* Полоса прокрутки: тонкая и почти невидимая (Firefox и запасной вариант) */
+    scrollbar-width: thin;
+    scrollbar-color: rgb(31 61 43 / 0.28) transparent;
+    /* место под полосу резервируется, поэтому страница не «прыгает» */
+    scrollbar-gutter: stable;
+  }
+
+  /* Chrome, Edge, Safari: тонкий ползунок, который чуть проявляется при наведении */
+  @supports selector(::-webkit-scrollbar) {
+    html {
+      scrollbar-width: auto;
+      scrollbar-color: auto;
+    }
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    /* Дорожка, кнопки-стрелки и уголок полностью прозрачные: виден только ползунок */
+    ::-webkit-scrollbar-track,
+    ::-webkit-scrollbar-track-piece,
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+    ::-webkit-scrollbar-button {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+    ::-webkit-scrollbar-thumb {
+      min-height: 48px;
+      border: 3px solid transparent;
+      border-radius: 999px;
+      background-color: rgb(31 61 43 / 0.22);
+      background-clip: content-box;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgb(31 61 43 / 0.5);
+    }
+    ::-webkit-scrollbar-thumb:active {
+      background-color: rgb(53 102 72 / 0.75);
+    }
+  }
+
+  body {
+    @apply bg-cream-100 text-ink-900 font-sans antialiased;
+    font-size: 1rem;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    /* запас под нижнюю панель контактов на мобильном + вырез iPhone */
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 768px) {
+    body {
+      padding-bottom: 0;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-forest-900;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  a,
+  button {
+    touch-action: manipulation;
+  }
+
+  ::selection {
+    @apply bg-lime-400 text-forest-950;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-forest-700;
+    border-radius: 0.375rem;
+  }
+}
+
+/* ==========================================================================
+   Свои утилиты (используются в компонентах)
+   ========================================================================== */
+
+/* «Листовая» форма: два противоположных угла скруглены сильнее */
+@utility rounded-leaf {
+  border-radius: 2.5rem 0.75rem 2.5rem 0.75rem;
+}
+@utility rounded-leaf-alt {
+  border-radius: 0.75rem 2.5rem 0.75rem 2.5rem;
+}
+
+/* Заголовок секции: крупный fluid-размер без брейкпоинтов */
+@utility text-h1 {
+  font-size: clamp(2rem, 7.5vw, 3.75rem);
+  font-weight: 700;
+}
+@utility text-h2 {
+  font-size: clamp(1.625rem, 5.5vw, 2.5rem);
+  font-weight: 700;
+}
+@utility text-lead {
+  font-size: clamp(1.0625rem, 3.2vw, 1.25rem);
+  color: var(--color-ink-700);
+}
+
+/* Малая метка над заголовком («Услуги», «Как работаем») */
+@utility eyebrow {
+  @apply font-display text-xs font-semibold tracking-widest uppercase text-forest-600;
+}
+
+/* Фон «бумага» с лёгкой зернистостью, делает кремовый фон живым */
+@utility bg-grain {
+  background-image: radial-gradient(rgb(31 61 43 / 0.045) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+/* Отступ под вырез iPhone для липких панелей */
+@utility pb-safe {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+/* Появление при скролле: компонент добавляет data-visible="true" */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s var(--ease-soft),
+    transform 0.7s var(--ease-soft);
+
+  &[data-visible='true'] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   Доступность: уважаем «уменьшить движение»
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
