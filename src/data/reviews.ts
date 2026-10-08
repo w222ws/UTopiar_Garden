@@ -24,6 +24,8 @@ export interface Review {
   text: string;
   /** Де залишили відгук: Telegram, Viber, Google... (необов'язково) */
   source?: string;
+  /** Шлях до фото-аватара (необов'язково). Немає фото: показується іконка людини. */
+  avatar?: string;
 }
 
 export const reviews: Review[] = [];
