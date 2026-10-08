@@ -1,6 +1,10 @@
+import { Footer } from './components/layout/Footer';
 import { Header } from './components/layout/Header';
 import { Hero } from './components/sections/Hero';
 import { HowItWorks } from './components/sections/HowitWorks';
+import { Reviews } from './components/sections/Reviews';
+import { Faq } from './components/sections/Faq';
+import { Works } from './components/sections/Works';
 import { Services } from './components/sections/Services';
 import { navigation } from './data/site';
 
@@ -17,9 +21,19 @@ export default function App() {
 
         <Services />
         <HowItWorks />
+        <Works />
+        <Reviews />
+        <Faq />
 
         {navigation
-          .filter((item) => item.href !== '#services' && item.href !== '#steps')
+          .filter(
+            (item) =>
+              item.href !== '#services' &&
+              item.href !== '#steps' &&
+              item.href !== '#works' &&
+              item.href !== '#faq' &&
+              item.href !== '#reviews',
+          )
           .map((item) => (
             <section
               key={item.href}
@@ -30,6 +44,7 @@ export default function App() {
             </section>
           ))}
       </main>
+      <Footer />
     </>
   );
 }
