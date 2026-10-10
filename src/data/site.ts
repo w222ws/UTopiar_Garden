@@ -8,16 +8,16 @@
    ========================================================================== */
 
 /** Номер у міжнародному форматі, без пробілів: +380XXXXXXXXX */
-const PHONE_E164 = '+380000000000';
+const PHONE_E164 = '+0637309392';
 /** Як номер виглядає на сайті */
-const PHONE_DISPLAY = '+38 (000) 000-00-00';
+const PHONE_DISPLAY = '+38 (063) 730-93-92';
 
 /** Нік у Telegram без @ */
-const TELEGRAM_USERNAME = 'your_username';
+const TELEGRAM_USERNAME = 'EvtushenkoJenya';
 
 /** Номер для Viber і WhatsApp, зазвичай той самий, що й телефон */
-const VIBER_NUMBER_E164 = PHONE_E164;
-const WHATSAPP_NUMBER_E164 = PHONE_E164;
+const VIBER_NUMBER_E164 = '+0637309392';
+const WHATSAPP_NUMBER_E164 = '+0637309392';
 
 /* ==========================================================================
    2. ПОХІДНІ ПОСИЛАННЯ: вручну не чіпати
@@ -84,7 +84,7 @@ export const contactList: Contact[] = [
    ========================================================================== */
 
 export const brand = {
-  name: 'Зелений Двір',
+  name: 'UTopiar Garden',
   tagline: 'Доглянута територія без клопоту',
 } as const;
 
@@ -95,7 +95,7 @@ export const brand = {
 export const business = {
   city: 'Ваше місто',
   serviceArea: 'Місто та передмістя',
-  workHours: 'Щодня, 8:00–20:00',
+  workHours: 'Щодня, 8:00–21:00',
 } as const;
 
 /* ==========================================================================

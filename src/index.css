@@ -1,17 +1,8 @@
-/* ==========================================================================
-   Шрифты (самохостинг через fontsource, есть кириллица)
-   npm i @fontsource-variable/unbounded @fontsource-variable/onest
-   ========================================================================== */
 @import '@fontsource-variable/unbounded';
 @import '@fontsource-variable/onest';
 
 @import 'tailwindcss';
 
-/* ==========================================================================
-   Дизайн-токены (Tailwind 4: всё живёт в @theme, tailwind.config не нужен)
-   Каждая переменная автоматически даёт утилиты: bg-forest-900, text-lime-400,
-   font-display, rounded-leaf, shadow-soft и т.д.
-   ========================================================================== */
 @theme {
   /* --- Цвета --- */
   --color-forest-950: #11261a;

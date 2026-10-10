@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import {
   ArrowDownIcon,
   HandSwipeRightIcon,
@@ -11,12 +11,20 @@ import {
   m,
   type Variants,
 } from 'motion/react';
-import { FaTelegram } from 'react-icons/fa6';
 import heroImage from '../../assets/hero.avif';
-import { contacts } from '../../data/site';
 import { cn } from '../../lib/cn';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+/*
+  Кадр фото на телефоне.
+  TREE_TOP: на скільки відсотків зверху фото (0 = край неба, 100 = низ) знаходиться
+  верхівка фіолетово-червоного дерева. Кадр на телефоні починається саме з цієї точки,
+  тож нижче дерева видно кущі й газон. Більше число = фото ще нижче, видно менше неба.
+  Максимум корисного значення 40: це вже самий низ фото.
+*/
+const TREE_TOP = 25;
+const MOBILE_FOCUS_Y = Math.min(100, (TREE_TOP / 40) * 100);
 
 /* Анимации текста: только opacity и transform, поэтому на телефоне плавно */
 const container: Variants = {
@@ -405,7 +413,8 @@ function DirtyPhoto({ ready }: { ready: boolean }) {
         height={1500}
         fetchPriority="high"
         decoding="async"
-        className="size-full object-cover"
+        className="size-full object-cover object-[50%_var(--focus-y)] lg:object-center"
+        style={{ '--focus-y': `${MOBILE_FOCUS_Y}%` } as CSSProperties}
       />
 
       {phase !== 'done' && (
@@ -429,7 +438,7 @@ function DirtyPhoto({ ready }: { ready: boolean }) {
       >
         <span className="inline-flex items-center gap-2 rounded-full bg-cream-50/95 px-4 py-2 text-sm font-medium text-forest-900 shadow-soft">
           <HandSwipeRightIcon weight="bold" className="size-4 animate-float" />
-          Протріть фото
+          Зітріть бруд
         </span>
       </div>
 
@@ -446,16 +455,13 @@ function DirtyPhoto({ ready }: { ready: boolean }) {
           />
           <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center px-3">
             <m.a
-              href={contacts.telegram.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#services"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.5, ease: EASE }}
               className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-lime-400 px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-forest-950 shadow-cta"
             >
-              <FaTelegram aria-hidden className="size-4 shrink-0" />
-              Чисто! Надішліть фото двору
+              Так буде і у вас
             </m.a>
           </div>
         </>
@@ -526,9 +532,9 @@ export function Hero() {
                   variants={rise}
                   className="text-lead mx-auto max-w-md lg:mx-0"
                 >
-                  Стрижка газону, обрізка дерев і кущів, прибирання території та
-                  листя. Надішліть фото ділянки в Telegram, і ми назвемо ціну до
-                  виїзду.
+                  Стрижка газону, обрізка дерев і кущів, прибирання території.
+                  Скиньте фото ділянки у Viber, Telegram або WhatsApp, і за 15
+                  хвилин ми назвемо орієнтовну ціну.
                 </m.p>
 
                 <m.div
@@ -536,16 +542,13 @@ export function Hero() {
                   className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center sm:gap-7 lg:justify-start"
                 >
                   <a
-                    href={contacts.telegram.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="#services"
                     className="inline-flex h-14 items-center justify-center gap-2.5 rounded-full bg-lime-400 px-8 font-display text-base font-semibold text-forest-950 shadow-cta transition-[translate,scale,background-color] duration-200 hover:-translate-y-0.5 hover:bg-lime-300 active:scale-[0.97]"
                   >
-                    <FaTelegram aria-hidden className="size-5" />
-                    Записатися в Telegram
+                    Послуги та вартість
                   </a>
                   <a
-                    href="#services"
+                    href="#works"
                     className="group inline-flex items-center justify-center gap-2 py-2 font-display text-sm font-semibold text-forest-900"
                   >
                     <span className="border-b-2 border-forest-900/20 pb-0.5 transition-colors group-hover:border-forest-900">
