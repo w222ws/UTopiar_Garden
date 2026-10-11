@@ -1,42 +1,22 @@
 /*
-  Роботи.
+  Роботи. Заглушок немає: що лежить у src/assets/works/, те й показується.
 
-  Поки фото немає, сайт показує намальовані заглушки, щоб було видно структуру.
-  Коли з'являться фото, кладеш їх у src/assets/works/ (формат AVIF), і заглушка
-  сама замінюється на фото. Нічого в коді міняти не треба.
+  Формат усіх файлів: AVIF.
 
-  Імена файлів (число = id роботи з workSlots нижче):
-    01-before.avif + 01-after.avif   пара «до / після» (слайдер)
-    02.avif                          одне фото
+  До / після (один слайдер):
+    src/assets/works/before.avif
+    src/assets/works/after.avif
+  Обидва фото в одному кадрі й одного розміру, щоб лінія збігалася.
 
-  Хочеш більше плиток: допиши рядок у workSlots.
+  Галерея (до 10 фото, порядок за номером):
+    src/assets/works/01.avif
+    src/assets/works/02.avif
+    ...
+    src/assets/works/10.avif
+
+  Немає before/after: слайдера в секції не буде.
+  Немає фото галереї: галереї не буде. Секція сама зникне, якщо порожня.
 */
-
-export type WorkKind = 'compare' | 'single';
-
-export interface WorkSlot {
-  id: string;
-  kind: WorkKind;
-  /** Мітка категорії на плитці: Рослини / Газон / Територія */
-  tag: string;
-  /** Підпис (необов'язково), наприклад "Стрижка туй, Дніпро" */
-  caption?: string;
-}
-
-export const workSlots: WorkSlot[] = [
-  { id: '01', kind: 'compare', tag: 'Газон' },
-  { id: '02', kind: 'single', tag: 'Рослини' },
-  { id: '03', kind: 'compare', tag: 'Рослини' },
-  { id: '04', kind: 'single', tag: 'Територія' },
-  { id: '05', kind: 'compare', tag: 'Територія' },
-  { id: '06', kind: 'single', tag: 'Газон' },
-];
-
-export interface Work extends WorkSlot {
-  before?: string;
-  after?: string;
-  single?: string;
-}
 
 const files = import.meta.glob('../assets/works/*.avif', {
   eager: true,
@@ -44,36 +24,16 @@ const files = import.meta.glob('../assets/works/*.avif', {
   import: 'default',
 }) as Record<string, string>;
 
-const photos = new Map<
-  string,
-  { before?: string; after?: string; single?: string }
->();
+const byName = (name: string) =>
+  Object.entries(files).find(([path]) => path.endsWith(`/${name}.avif`))?.[1];
 
-for (const [path, url] of Object.entries(files)) {
-  const match = path.match(/(\d+)(?:-(before|after))?\.avif$/);
-  if (!match) continue;
-  const [, id, kind] = match;
-  const entry = photos.get(id) ?? {};
-  if (kind === 'before') entry.before = url;
-  else if (kind === 'after') entry.after = url;
-  else entry.single = url;
-  photos.set(id, entry);
-}
+const before = byName('before');
+const after = byName('after');
 
-const slots = [...workSlots];
+export const compare = before && after ? { before, after } : null;
 
-// Фото з id, якого немає в workSlots, теж показуємо (додаємо плитку в кінець)
-for (const id of photos.keys()) {
-  if (!slots.some((slot) => slot.id === id)) {
-    const entry = photos.get(id)!;
-    slots.push({
-      id,
-      kind: entry.before && entry.after ? 'compare' : 'single',
-      tag: '',
-    });
-  }
-}
-
-export const works: Work[] = slots
-  .sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }))
-  .map((slot) => ({ ...slot, ...photos.get(slot.id) }));
+export const gallery: string[] = Object.entries(files)
+  .map(([path, url]) => ({ n: path.match(/\/(\d+)\.avif$/)?.[1], url }))
+  .filter((item): item is { n: string; url: string } => Boolean(item.n))
+  .sort((a, b) => Number(a.n) - Number(b.n))
+  .map((item) => item.url);
