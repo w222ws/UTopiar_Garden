@@ -1,3 +1,4 @@
+import logo from '../../assets/logo.svg';
 import { ArrowUpIcon, ClockIcon, MapPinIcon } from '@phosphor-icons/react';
 import { FaTelegram, FaViber, FaWhatsapp } from 'react-icons/fa6';
 import { brand, business, contacts, navigation } from '../../data/site';
@@ -66,9 +67,15 @@ export function Footer() {
             <div>
               <a
                 href="#"
-                className="font-display text-2xl font-extrabold tracking-tight"
+                aria-label="UTopiar Garden, нагору"
+                className="inline-block rounded-2xl bg-cream-50 px-3.5 py-2.5"
               >
-                UTopiar <span className="text-lime-400">Garden</span>
+                <img
+                  src={logo}
+                  alt="UTopiar Garden"
+                  className="h-9 w-auto"
+                  loading="lazy"
+                />
               </a>
               <p className="mt-2 max-w-xs text-cream-100/70">{brand.tagline}</p>
             </div>

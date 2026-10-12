@@ -1,6 +1,11 @@
-import { useEffect, useState } from 'react';
-import { ArrowUpRightIcon, PhoneCallIcon } from '@phosphor-icons/react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  ArrowUpRightIcon,
+  CaretDownIcon,
+  PhoneCallIcon,
+} from '@phosphor-icons/react';
 import { FaTelegram, FaViber, FaWhatsapp } from 'react-icons/fa6';
+import logo from '../../assets/logo.svg';
 import { business, contacts, navigation } from '../../data/site';
 import { cn } from '../../lib/cn';
 
@@ -16,6 +21,26 @@ const messengerButton =
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
+  const contactRef = useRef<HTMLDivElement>(null);
+
+  /* Выпадающее меню «Записатися» (десктоп): закрывается кликом снаружи и Escape */
+  useEffect(() => {
+    if (!contactOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!contactRef.current?.contains(event.target as Node))
+        setContactOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setContactOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [contactOpen]);
 
   /* Фон шапки появляется после небольшого скролла.
      Слушатель passive + rAF, состояние меняется только при смене значения. */
@@ -81,12 +106,17 @@ export function Header() {
           'flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]',
         )}
       >
-        {/* ЗАГЛУШКА лого: потом заменим этот <a> на <img> с настоящим логотипом */}
         <a
           href="#top"
-          className="shrink-0 rounded-md font-display text-lg font-bold tracking-tight whitespace-nowrap text-forest-900"
+          aria-label="UTopiar Garden, на початок"
+          className="shrink-0 rounded-md"
         >
-          UTopiar <span className="text-forest-600">Garden</span>
+          <img
+            src={logo}
+            alt="UTopiar Garden"
+            className="h-9 w-auto lg:h-10"
+            fetchPriority="high"
+          />
         </a>
 
         {/* Навигация: десктоп */}
@@ -109,18 +139,67 @@ export function Header() {
           </ul>
         </nav>
 
-        {/* Справа: десктоп */}
-        <div className="hidden shrink-0 items-center lg:flex">
-          <a
-            href={contacts.telegram.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Записатися в Telegram"
+        {/* Справа: десктоп. Кнопка раскрывает мини-меню с тремя мессенджерами */}
+        <div ref={contactRef} className="relative hidden shrink-0 lg:block">
+          <button
+            type="button"
+            aria-haspopup="true"
+            aria-expanded={contactOpen}
+            aria-controls="contact-menu"
+            onClick={() => setContactOpen((value) => !value)}
             className={cn(ctaButton, 'h-11 px-5 text-sm')}
           >
-            <FaTelegram aria-hidden className="size-5" />
             Записатися
-          </a>
+            <CaretDownIcon
+              aria-hidden
+              weight="bold"
+              className={cn(
+                'size-4 transition-transform duration-200',
+                contactOpen && 'rotate-180',
+              )}
+            />
+          </button>
+
+          <div
+            id="contact-menu"
+            className={cn(
+              'absolute top-full right-0 mt-3 flex origin-top-right gap-2 rounded-2xl border border-forest-900/10 bg-cream-50 p-2 shadow-lift transition-[opacity,translate,scale,visibility] duration-200 ease-out',
+              contactOpen
+                ? 'visible translate-y-0 scale-100 opacity-100'
+                : 'invisible -translate-y-2 scale-95 opacity-0',
+            )}
+          >
+            {[
+              {
+                ...contacts.telegram,
+                Icon: FaTelegram,
+                name: 'Telegram',
+                blank: true,
+              },
+              { ...contacts.viber, Icon: FaViber, name: 'Viber', blank: false },
+              {
+                ...contacts.whatsapp,
+                Icon: FaWhatsapp,
+                name: 'WhatsApp',
+                blank: true,
+              },
+            ].map(({ href, Icon, name, blank }) => (
+              <a
+                key={name}
+                href={href}
+                {...(blank
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+                aria-label={`Записатися в ${name}`}
+                title={name}
+                tabIndex={contactOpen ? 0 : -1}
+                onClick={() => setContactOpen(false)}
+                className="grid size-12 place-items-center rounded-xl bg-forest-900 text-cream-50 transition-[translate,background-color,color] duration-200 hover:-translate-y-0.5 hover:bg-lime-400 hover:text-forest-950"
+              >
+                <Icon aria-hidden className="size-6" />
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* Справа: мобильный (звонок + бургер) */}

@@ -74,7 +74,7 @@ export const serviceGroups: ServiceGroup[] = [
     icon: 'grass',
     items: [
       {
-        name: 'Регулярний покос газону',
+        name: 'Стрижка газону',
         price: 400,
         from: true,
         unit: 'сотка',
@@ -135,7 +135,7 @@ export const serviceGroups: ServiceGroup[] = [
       },
     ],
     includes: [
-      'Регулярний покос',
+      'Стрижка газону',
       'Топіарна стрижка',
       'Сезонна хімія',
       'Підживлення',

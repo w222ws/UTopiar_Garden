@@ -75,7 +75,7 @@ function useAppReady() {
    (колесо, палець, клавіші) плавно стає яскравим. Тільки CSS-перехід filter.
    ========================================================================== */
 
-function useFirstScroll() {
+function useFirstScroll(ready: boolean) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -92,6 +92,13 @@ function useFirstScroll() {
     events.forEach((e) => window.addEventListener(e, done, opts));
     return () => events.forEach((e) => window.removeEventListener(e, done));
   }, []);
+
+  /* Только десктоп: через 0,5 с после появления страницы фото само становится цветным */
+  useEffect(() => {
+    if (!ready || !window.matchMedia('(min-width: 1024px)').matches) return;
+    const id = window.setTimeout(() => setScrolled(true), 700);
+    return () => window.clearTimeout(id);
+  }, [ready]);
 
   return scrolled;
 }
@@ -118,15 +125,9 @@ function HeroPhoto({ bright }: { bright: boolean }) {
   );
 }
 
-/* ==========================================================================
-   Hero
-   Мобильный порядок: плашка → заголовок → фото → текст и кнопки (всё по центру).
-   Десктоп: текст слева, фото справа.
-   ========================================================================== */
-
 export function Hero() {
   const ready = useAppReady();
-  const bright = useFirstScroll();
+  const bright = useFirstScroll(ready);
 
   return (
     <LazyMotion features={domAnimation}>

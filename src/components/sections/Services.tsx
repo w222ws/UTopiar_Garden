@@ -1,12 +1,5 @@
-import {
-  memo,
-  useEffect,
-  useRef,
-  useState,
-  type KeyboardEvent,
-  type ReactNode,
-} from 'react';
-import { domAnimation, LazyMotion, m, useInView } from 'motion/react';
+import { useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { domAnimation, LazyMotion, m } from 'motion/react';
 import {
   BroomIcon,
   CalendarCheckIcon,
@@ -70,41 +63,6 @@ function Word({
   );
 }
 
-/* Число «набегает». Пишем прямо в DOM, без setState: React не перерисовывает секцию 60 раз в секунду */
-const CountUp = memo(function CountUp({ to }: { to: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const output = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-40px' });
-
-  useEffect(() => {
-    const out = output.current;
-    if (!inView || !out) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      out.textContent = money(to);
-      return;
-    }
-    let frame = 0;
-    const start = performance.now() + 300;
-    const tick = (now: number) => {
-      const t = Math.min(1, Math.max(0, (now - start) / 1400));
-      out.textContent = money(Math.round(to * (1 - Math.pow(1 - t, 3))));
-      if (t < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [inView, to]);
-
-  return (
-    <span ref={ref} className="relative inline-block tabular-nums">
-      {/* невидимое итоговое число держит ширину */}
-      <span className="invisible">{money(to)}</span>
-      <span ref={output} aria-hidden className="absolute inset-0 text-right">
-        0
-      </span>
-    </span>
-  );
-});
-
 export function Services() {
   const [active, setActive] = useState(0);
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -153,7 +111,7 @@ export function Services() {
 
         <div className={cn(wrap, 'relative')}>
           {/* Заголовок + мінімальний виїзд */}
-          <div className="grid items-end gap-8 lg:grid-cols-[1fr_auto] lg:gap-16">
+          <div className="grid items-end gap-5 lg:grid-cols-[1fr_auto] lg:gap-16">
             <h2 className="text-h2 max-w-2xl text-cream-50">
               <Word index={0}>Послуги</Word> <Word index={1}>та</Word>{' '}
               <Word index={2} className="text-lime-400">
@@ -161,26 +119,16 @@ export function Services() {
               </Word>
             </h2>
 
-            <m.div
+            <m.p
               {...fadeUp(0.1)}
-              className="lg:text-right"
+              className="inline-flex items-center gap-2 self-start rounded-full border border-cream-50/20 px-4 py-2 text-sm text-cream-100/80 lg:self-end"
               aria-label={`Мінімальна вартість виїзду на об'єкт від ${money(MIN_VISIT_PRICE)} гривень`}
             >
-              <p className="font-display text-sm font-semibold text-cream-100/80">
-                Мінімальна вартість виїзду на об'єкт
-              </p>
-              <p className="mt-2 flex items-baseline gap-2 text-lime-400 lg:justify-end">
-                <span className="font-display text-base font-semibold">
-                  від
-                </span>
-                <span className="font-display text-[3.5rem] leading-[0.85] font-extrabold tracking-tighter sm:text-[5rem]">
-                  <CountUp to={MIN_VISIT_PRICE} />
-                </span>
-                <span className="font-display text-base font-semibold">
-                  грн
-                </span>
-              </p>
-            </m.div>
+              Мінімальний виїзд на об'єкт
+              <span className="font-display font-semibold whitespace-nowrap text-lime-400">
+                від {money(MIN_VISIT_PRICE)} грн
+              </span>
+            </m.p>
           </div>
 
           {/* Вкладки + панель: один общий блок, одно появление */}
